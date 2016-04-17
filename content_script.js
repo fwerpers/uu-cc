@@ -1,18 +1,27 @@
-function getCourseList(entrypoint) {
+
+function getCourseEntries(entrypoint) {
 	var container = entrypoint.parentElement.parentElement.parentElement;
+
 	return container.children;
 }
 
-function analyzeHTML() {
+function htmlToCourseList() {
 
-	// "Completed courses" element
-	var entrypoint = document.getElementsByTagName('h3')[0];
-	var list = getCourseList(entrypoint);
+	var entrypoint = document.getElementsByTagName('h3')[0]; // "Completed courses" element
+	var endpoint = document.getElementsByTagName('h3')[1]; // "Incomplete courses" element
 
-	// responsetext contains the first course code
-	var responsetext = list[1].firstElementChild.innerHTML;
+	var container = entrypoint.parentElement.parentElement.parentElement;
+	var entries = container.children;
 
-	return {test: responsetext};
+	// Create and return a list of course codes
+	var course_list = [];
+	var i = 1;
+	do {
+		course_list.push(entries[i].firstElementChild.innerHTML);
+		i++;
+	} while (!entries[i].contains(endpoint))
+
+	return {course_list: course_list};
 }
 
 alert('TEST');
@@ -24,7 +33,7 @@ chrome.runtime.sendMessage({found: true})
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if (request.clicked) {
-			var result = analyzeHTML()
-			sendResponse(result)
+			var course_list = htmlToCourseList()
+			sendResponse(course_list)
 		}
 	})

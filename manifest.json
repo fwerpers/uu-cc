@@ -23,6 +23,8 @@
 
   "permissions": [
     "activeTab",
+    "http://www.uu.se/*",
+    "http://www.uu.se/utbildning/utbildningar/selma/kursplan/*",
     "https://ajax.googleapis.com/"
   ]
 }
