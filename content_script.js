@@ -15,7 +15,7 @@ function htmlToCourseList() {
 
 	// Create and return a list of course codes
 	var course_list = [];
-	var i = 1;
+	var i = 1; // skip header
 	do {
 		course_list.push(entries[i].firstElementChild.innerHTML);
 		i++;
@@ -23,8 +23,6 @@ function htmlToCourseList() {
 
 	return {course_list: course_list};
 }
-
-alert('TEST');
 
 // Notify background page when the correct URL is visited
 chrome.runtime.sendMessage({found: true})

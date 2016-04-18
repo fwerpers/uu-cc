@@ -6,8 +6,8 @@
   "version": "1.0",
 
   "page_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup_temp.html"
+    "default_icon": "uu.png",
+    "default_popup": "popup.html"
   },
 
   "background": {
@@ -23,7 +23,7 @@
 
   "permissions": [
     "activeTab",
-    "http://www.uu.se/*",
+    // "http://www.uu.se/*",
     "http://www.uu.se/utbildning/utbildningar/selma/kursplan/*",
     "https://ajax.googleapis.com/"
   ]
