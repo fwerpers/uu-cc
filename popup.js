@@ -27,12 +27,16 @@ function hideStatus() {
 
 function populateTable(table_data) {
 	var table = document.getElementById('hp_table');
+	var placeholder = document.getElementById('placeholder');
 
 	table.rows[1].cells[1].innerHTML = table_data.total;
 	table.rows[2].cells[1].innerHTML = table_data.tech;
 	table.rows[3].cells[1].innerHTML = table_data.cs;
 	table.rows[4].cells[1].innerHTML = table_data.adv;
 	table.rows[5].cells[1].innerHTML = table_data.adv_tech;
+
+	placeholder.style.display = 'none';
+	table.style.display = 'inline';
 
 	hideStatus();
 }
