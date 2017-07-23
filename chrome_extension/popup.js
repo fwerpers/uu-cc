@@ -15,15 +15,6 @@ function setLoaderSize() {
 
 }
 
-// Write to the status element
-function renderStatus(statusText) {
-	document.getElementById('status').textContent = statusText;
-}
-
-function hideStatus() {
-	document.getElementById('status').style.display = 'none';
-}
-
 function populateTable(table_data) {
 	var table = document.getElementById('hp_table');
 	var placeholder = document.getElementById('placeholder');
@@ -37,7 +28,6 @@ function populateTable(table_data) {
 	placeholder.style.display = 'none';
 	table.style.display = 'inline';
 
-	hideStatus();
 }
 
 function coursePagesToStats(html_list) {
@@ -154,7 +144,6 @@ function loopCourses(course_list) {
 // Notify the content script when the page action is clicked
 document.addEventListener('DOMContentLoaded', function() {
 	setLoaderSize();
-	//renderStatus('Retrieving table...');
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, {clicked: true}, function(response) {
 			loopCourses(response.course_list);
