@@ -1,10 +1,3 @@
-
-function getCourseEntries(entrypoint) {
-	var container = entrypoint.parentElement.parentElement.parentElement;
-
-	return container.children;
-}
-
 function htmlToCourseList() {
 
 	var entrypoint = document.getElementsByTagName('h3')[0]; // "Completed courses" element
