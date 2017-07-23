@@ -124,13 +124,13 @@ function getUrl(url, callback) {
 }
 
 // Populate table
-function loopCourses(course_list) {
+function loopCourses(courseList) {
 	var base_url = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
 	var html_list = [];
-	var calls_remaining = course_list.length;
+	var calls_remaining = courseList.length;
 	var i;
-	for (i=0; i<course_list.length; i++) {
-		var url = base_url + '?kKod=' + course_list[i];
+	for (i=0; i<courseList.length; i++) {
+		var url = base_url + '?kKod=' + courseList[i];
 		getUrl(url, function(response) {
 			html_list.push(response);
 			calls_remaining--;
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	setLoaderSize();
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, {clicked: true}, function(response) {
-			loopCourses(response.course_list);
+			loopCourses(response.courseList);
 		});
 	});
 })
