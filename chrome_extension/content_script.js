@@ -1,20 +1,20 @@
 function htmlToCourseList() {
 
-	var entrypoint = document.getElementsByTagName('h3')[0]; // "Completed courses" element
-	var endpoint = document.getElementsByTagName('h3')[1]; // "Incomplete courses" element
+	var entrypoint = document.getElementsByTagName('h3')[0] // "Completed courses" element
+	var endpoint = document.getElementsByTagName('h3')[1] // "Incomplete courses" element
 
-	var container = entrypoint.parentElement.parentElement.parentElement;
-	var entries = container.children;
+	var container = entrypoint.parentElement.parentElement.parentElement
+	var entries = container.children
 
 	// Create and return a list of course codes
-	var courseList = [];
+	var courseList = []
 	var i = 1; // skip header
 	do {
-		courseList.push(entries[i].firstElementChild.innerHTML);
-		i++;
+		courseList.push(entries[i].firstElementChild.innerHTML)
+		i++
 	} while (!entries[i].contains(endpoint))
 
-	return {courseList: courseList};
+	return {courseList: courseList}
 }
 
 // Notify background page when the correct URL is visited
