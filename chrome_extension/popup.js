@@ -122,7 +122,7 @@ function htmlToStats(html_text) {
 	return stats;
 }
 
-function getCoursePage(url, callback) {
+function getUrl(url, callback) {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
@@ -141,7 +141,7 @@ function loopCourses(course_list) {
 	var i;
 	for (i=0; i<course_list.length; i++) {
 		var url = base_url + '?kKod=' + course_list[i];
-		getCoursePage(url, function(response) {
+		getUrl(url, function(response) {
 			html_list.push(response);
 			calls_remaining--;
 			if (calls_remaining <= 0) {
