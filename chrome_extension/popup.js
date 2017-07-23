@@ -4,7 +4,7 @@ function setLoaderSize() {
 	var placeholder = document.getElementById('placeholder');
 	var loader = document.getElementById('loader');
 	var table = document.getElementById('hp_table');
-	var size = { 
+	var size = {
 		width: table.offsetWidth,
 		height: table.offsetHeight
 	}
@@ -13,7 +13,6 @@ function setLoaderSize() {
 	placeholder.style.width = String(size.width) + 'px';
 	placeholder.style.height = String(size.height) + 'px';
 
-	console.log(String(size.width) + 'px');
 }
 
 // Write to the status element
@@ -61,7 +60,6 @@ function coursePagesToStats(html_list) {
 		table_data.cs += stats.cs;
 	}
 
-	console.log(table_data);
 	populateTable(table_data);
 }
 
@@ -82,8 +80,6 @@ function htmlToStats(html_text) {
 	var point_item = fact_list[0];
 	var point_str = point_item.firstElementChild.innerHTML.trim();
 	var points = Number(point_str.split(' ')[0].replace(',','.'));
-
-	console.log(points);
 
 	// Retrieve level
 	var level_item = fact_list[2];
@@ -139,7 +135,6 @@ function getCoursePage(url, callback) {
 
 // Populate table
 function loopCourses(course_list) {
-	console.log(course_list);
 	var base_url = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
 	var html_list = [];
 	var calls_remaining = course_list.length;
