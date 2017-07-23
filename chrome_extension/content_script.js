@@ -24,7 +24,7 @@ chrome.runtime.sendMessage({found: true})
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if (request.clicked) {
-			var course_list = htmlToCourseList()
-			sendResponse(course_list)
+			var response = htmlToCourseList()
+			sendResponse(response)
 		}
 	})
