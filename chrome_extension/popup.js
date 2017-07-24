@@ -38,41 +38,17 @@ function setPlaceholderSize() {
 
 }
 
-function populateTable(table_data) {
+function populateTable(tableData) {
 	var table = getPopupTable()
 
-	table.rows[1].cells[1].innerHTML = table_data.total;
-	table.rows[2].cells[1].innerHTML = table_data.tech;
-	table.rows[3].cells[1].innerHTML = table_data.cs;
-	table.rows[4].cells[1].innerHTML = table_data.adv;
-	table.rows[5].cells[1].innerHTML = table_data.adv_tech;
+	table.rows[1].cells[1].innerHTML = tableData.total;
+	table.rows[2].cells[1].innerHTML = tableData.tech;
+	table.rows[3].cells[1].innerHTML = tableData.cs;
+	table.rows[4].cells[1].innerHTML = tableData.adv;
+	table.rows[5].cells[1].innerHTML = tableData.advTech;
 
 	hidePlaceholder()
 	showPopupTable()
-
-}
-
-function coursePagesToStats(html_list) {
-	var table_data = {
-		total: 0,
-		adv: 0,
-		tech: 0,
-		adv_tech: 0,
-		cs: 0
-	}
-
-	var i;
-	var stats;
-	for (i=0; i<html_list.length; i++) {
-		stats = htmlToStats(html_list[i]);
-		table_data.total += stats.total;
-		table_data.adv += stats.adv;
-		table_data.tech += stats.tech;
-		table_data.adv_tech += stats.adv_tech;
-		table_data.cs += stats.cs;
-	}
-
-	populateTable(table_data);
 }
 
 function htmlToStats(html_text) {
@@ -151,20 +127,34 @@ function getUrl(url, callback) {
 	xmlHttp.send(null);
 }
 
-// Populate table
-function loopCourses(courseList) {
-	var html_list = [];
-	var calls_remaining = courseList.length;
+function generateTable(courseList) {
+	var tableData = {
+		total: 0,
+		adv: 0,
+		tech: 0,
+		advTech: 0,
+		cs: 0
+	}
+
+	var callsRemaining = courseList.length;
+
 	for (var i=0; i<courseList.length; i++) {
-		var code = courseList[i].code
-		getCatalogHTML(code, function(response) {
-			html_list.push(response);
-			calls_remaining--;
-			if (calls_remaining <= 0) {
-				coursePagesToStats(html_list);
+		var courseEntry = courseList[i]
+		var code = courseEntry.code
+		getCatalogHTML(code, function(html) {
+			var stats = htmlToStats(html);
+			tableData.total += stats.total;
+			tableData.adv += stats.adv;
+			tableData.tech += stats.tech;
+			tableData.advTech += stats.adv_tech;
+			tableData.cs += stats.cs;
+			callsRemaining--;
+			if (callsRemaining <= 0) {
+				populateTable(tableData);
 			}
 		});
 	}
+
 }
 
 // Notify the content script when the page action is clicked
@@ -172,8 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	setPlaceholderSize();
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, {clicked: true}, function(response) {
-			console.log(response.newCourseList)
-			loopCourses(response.courseList)
+			//loopCourses(response.courseList)
+			generateTable(response.courseList)
 		});
 	});
 })
