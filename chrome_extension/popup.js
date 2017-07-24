@@ -24,7 +24,7 @@ function hidePlaceholder() {
 	placeholder.style.display = 'none';
 }
 
-function setLoaderSize() {
+function setPlaceholderSize() {
 	var placeholder = getPlaceholder()
 	var table = getPopupTable()
 	var size = {
@@ -169,7 +169,7 @@ function loopCourses(courseList) {
 
 // Notify the content script when the page action is clicked
 document.addEventListener('DOMContentLoaded', function() {
-	setLoaderSize();
+	setPlaceholderSize();
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, {clicked: true}, function(response) {
 			console.log(response.newCourseList)
