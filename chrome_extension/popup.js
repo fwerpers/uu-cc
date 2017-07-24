@@ -1,14 +1,37 @@
 
+function getPopupTable() {
+	var table = document.getElementById('hp_table')
+	return(table)
+}
+
+function hidePopupTable() {
+	var table = getPopupTable()
+	table.style.display = 'none'
+}
+
+function showPopupTable() {
+	var table = getPopupTable()
+	table.style.display = 'inline'
+}
+
+function getPlaceholder() {
+	var placeholder = document.getElementById('placeholder')
+	return(placeholder)
+}
+
+function hidePlaceholder() {
+	var placeholder = getPlaceholder()
+	placeholder.style.display = 'none';
+}
+
 function setLoaderSize() {
-	var container = document.getElementById('loader_container');
-	var placeholder = document.getElementById('placeholder');
-	var loader = document.getElementById('loader');
-	var table = document.getElementById('hp_table');
+	var placeholder = getPlaceholder()
+	var table = getPopupTable()
 	var size = {
 		width: table.offsetWidth,
 		height: table.offsetHeight
 	}
-	table.style.display = 'none';
+	hidePopupTable()
 
 	placeholder.style.width = String(size.width) + 'px';
 	placeholder.style.height = String(size.height) + 'px';
@@ -16,8 +39,7 @@ function setLoaderSize() {
 }
 
 function populateTable(table_data) {
-	var table = document.getElementById('hp_table');
-	var placeholder = document.getElementById('placeholder');
+	var table = getPopupTable()
 
 	table.rows[1].cells[1].innerHTML = table_data.total;
 	table.rows[2].cells[1].innerHTML = table_data.tech;
@@ -25,8 +47,8 @@ function populateTable(table_data) {
 	table.rows[4].cells[1].innerHTML = table_data.adv;
 	table.rows[5].cells[1].innerHTML = table_data.adv_tech;
 
-	placeholder.style.display = 'none';
-	table.style.display = 'inline';
+	hidePlaceholder()
+	showPopupTable()
 
 }
 
