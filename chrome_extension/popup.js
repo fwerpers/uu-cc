@@ -136,13 +136,13 @@ function generateTable(courseList) {
 		cs: 0
 	}
 
-	var callsRemaining = courseList.length;
+	var courseEntriesRemaining = courseList.length;
 
 	for (var i=0; i<courseList.length; i++) {
 		var courseEntry = courseList[i]
 		var code = courseEntry.code
 		if (!courseEntry.isCompleted) {
-			callsRemaining--
+			courseEntriesRemaining--
 			continue
 		}
 		getCatalogHTML(code, function(html) {
@@ -152,8 +152,8 @@ function generateTable(courseList) {
 			tableData.tech += stats.tech;
 			tableData.advTech += stats.adv_tech;
 			tableData.cs += stats.cs;
-			callsRemaining--;
-			if (callsRemaining <= 0) {
+			courseEntriesRemaining--;
+			if (courseEntriesRemaining <= 0) {
 				populateTable(tableData);
 			}
 		});
