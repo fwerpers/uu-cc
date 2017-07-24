@@ -53,11 +53,11 @@ function populateTable(tableData) {
 
 function htmlToStats(html_text) {
 	var stats = {
-		total: 0,
-		adv: 0,
-		tech: 0,
-		adv_tech: 0,
-		cs: 0
+		points: 0,
+		adv: false,
+		tech: false,
+		adv_tech: false,
+		cs: false
 	}
 
 	var el = document.createElement('html');
@@ -67,7 +67,7 @@ function htmlToStats(html_text) {
 	// Retrieve credits
 	var point_item = fact_list[0];
 	var point_str = point_item.firstElementChild.innerHTML.trim();
-	var points = Number(point_str.split(' ')[0].replace(',','.'));
+	stats.points = Number(point_str.split(' ')[0].replace(',','.'));
 
 	// Retrieve level
 	var level_item = fact_list[2];
@@ -93,18 +93,17 @@ function htmlToStats(html_text) {
 	}
 
 	// Distribute points according to subjects and level
-	stats.total += points;
 	if (level == 'A') {
-		stats.adv += points;
+		stats.adv = true;
 	}
 	if (is_tech) {
-		stats.tech += points;
+		stats.tech = true;
 	}
 	if (level == 'A' && is_tech) {
-		stats.adv_tech += points;
+		stats.adv_tech = true;
 	}
 	if (is_cs) {
-		stats.cs += points;
+		stats.cs = true;
 	}
 
 	return stats;
@@ -147,11 +146,11 @@ function generateTable(courseList) {
 		}
 		getCatalogHTML(code, function(html) {
 			var stats = htmlToStats(html);
-			tableData.total += stats.total;
-			tableData.adv += stats.adv;
-			tableData.tech += stats.tech;
-			tableData.advTech += stats.adv_tech;
-			tableData.cs += stats.cs;
+			tableData.total += stats.points;
+			tableData.adv += stats.adv*stats.points;
+			tableData.tech += stats.tech*stats.points;
+			tableData.advTech += stats.adv_tech*stats.points;
+			tableData.cs += stats.cs*stats.points;
 			courseEntriesRemaining--;
 			if (courseEntriesRemaining <= 0) {
 				populateTable(tableData);
