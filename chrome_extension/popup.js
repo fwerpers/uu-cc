@@ -135,7 +135,7 @@ function loopCourses(courseList) {
 	var calls_remaining = courseList.length;
 	for (var i=0; i<courseList.length; i++) {
 		var code = courseList[i]
-		getCatalogHTML(courseList[i], function(response) {
+		getCatalogHTML(code, function(response) {
 			html_list.push(response);
 			calls_remaining--;
 			if (calls_remaining <= 0) {
