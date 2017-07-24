@@ -63,7 +63,8 @@ function getCourseListFromHTML() {
 }
 
 function createResponse() {
-	courseList = getCourseListFromHTML()
+	courseTableModel = new CourseTableModel()
+	courseList = courseTableModel.courseList
 	response = {courseList: courseList}
 	return(response)
 }
@@ -76,8 +77,8 @@ chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if (request.clicked) {
 			var response = createResponse()
-			tableModel = new CourseTableModel()
-			console.log(tableModel)
+			//tableModel = new CourseTableModel()
+			//console.log(tableModel)
 			sendResponse(response)
 		}
 	})
