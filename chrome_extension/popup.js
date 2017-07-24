@@ -141,6 +141,10 @@ function generateTable(courseList) {
 	for (var i=0; i<courseList.length; i++) {
 		var courseEntry = courseList[i]
 		var code = courseEntry.code
+		if (!courseEntry.isCompleted) {
+			callsRemaining--
+			continue
+		}
 		getCatalogHTML(code, function(html) {
 			var stats = htmlToStats(html);
 			tableData.total += stats.total;
