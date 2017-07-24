@@ -112,6 +112,12 @@ function htmlToStats(html_text) {
 	return stats;
 }
 
+function getCatalogHTML(code, callback) {
+	var baseUrl = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
+	var url = baseUrl + '?kKod=' + code
+	var catalogHTML = getUrl(url, callback)
+}
+
 function getUrl(url, callback) {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -125,13 +131,11 @@ function getUrl(url, callback) {
 
 // Populate table
 function loopCourses(courseList) {
-	var base_url = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
 	var html_list = [];
 	var calls_remaining = courseList.length;
-	var i;
-	for (i=0; i<courseList.length; i++) {
-		var url = base_url + '?kKod=' + courseList[i];
-		getUrl(url, function(response) {
+	for (var i=0; i<courseList.length; i++) {
+		var code = courseList[i]
+		getCatalogHTML(courseList[i], function(response) {
 			html_list.push(response);
 			calls_remaining--;
 			if (calls_remaining <= 0) {
