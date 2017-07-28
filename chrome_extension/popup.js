@@ -127,6 +127,8 @@ function getUrl(url, callback) {
 }
 
 function generateTable(courseList) {
+	var r = Rx.Observable.of('hej')
+		.subscribe(function(x){console.log(x)})
 	var tableData = {
 		total: 0,
 		adv: 0,
