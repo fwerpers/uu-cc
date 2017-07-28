@@ -109,6 +109,15 @@ function htmlToStats(html_text) {
 	return stats;
 }
 
+function getCourseInfoObservable(code) {
+	var baseUrl = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
+	var url = baseUrl + '?kKod=' + code
+	var courseHTMLObservable = Rx.Observable
+		.ajax({url: url, method: 'GET', responseType: 'html'})
+		.map(data => data.response)
+	return(courseHTMLObservable)
+}
+
 function getCatalogHTML(code, callback) {
 	var baseUrl = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
 	var url = baseUrl + '?kKod=' + code
@@ -127,8 +136,7 @@ function getUrl(url, callback) {
 }
 
 function generateTable(courseList) {
-	var r = Rx.Observable.of('hej')
-		.subscribe(function(x){console.log(x)})
+
 	var tableData = {
 		total: 0,
 		adv: 0,
@@ -136,6 +144,11 @@ function generateTable(courseList) {
 		advTech: 0,
 		cs: 0
 	}
+
+	var rs = Rx.Observable
+		.from(courseList)
+		.flatMap(courseEntry => getCourseInfoObservable(courseEntry.code))
+		.subscribe(courseHTML => console.log(courseHTML))
 
 	var courseEntriesRemaining = courseList.length;
 
@@ -146,6 +159,9 @@ function generateTable(courseList) {
 			courseEntriesRemaining--
 			continue
 		}
+		//TODO: Create ajax observables
+		// Merge, flatmap, zip?
+		// Make a function which takes html and create a courseInfo object
 		getCatalogHTML(code, function(html) {
 			var stats = htmlToStats(html);
 			tableData.total += stats.points;
