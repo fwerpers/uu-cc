@@ -51,7 +51,7 @@ function populateTable(tableData) {
 	showPopupTable()
 }
 
-function htmlToStats(html_text) {
+function getCourseStats(html, courseEntry) {
 	var stats = {
 		points: 0,
 		adv: false,
@@ -61,13 +61,17 @@ function htmlToStats(html_text) {
 	}
 
 	var el = document.createElement('html');
-	el.innerHTML = html_text;
+	el.innerHTML = html;
 	var fact_list = el.getElementsByClassName('syllabusFacts introductory-note is-unstyled')[0].children;
 
 	// Retrieve credits
-	var point_item = fact_list[0];
-	var point_str = point_item.firstElementChild.innerHTML.trim();
-	stats.points = Number(point_str.split(' ')[0].replace(',','.'));
+	if (!courseEntry.isCompleted) {
+		stats.points = 0
+	} else {
+		var point_item = fact_list[0];
+		var point_str = point_item.firstElementChild.innerHTML.trim();
+		stats.points = Number(point_str.split(' ')[0].replace(',','.'));
+	}
 
 	// Retrieve level
 	var level_item = fact_list[2];
@@ -109,33 +113,21 @@ function htmlToStats(html_text) {
 	return stats;
 }
 
-function getCourseInfoObservable(code) {
+function getCourseStatsObservable(courseEntry) {
 	var baseUrl = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
+	var code = courseEntry.code
 	var url = baseUrl + '?kKod=' + code
 	var courseHTMLObservable = Rx.Observable
-		.ajax({url: url, method: 'GET', responseType: 'html'})
-		.map(data => data.response)
+		.ajax({url: url, method: 'GET', responseType: 'text'})
+		.map(data => getCourseStats(data.response, courseEntry))
 	return(courseHTMLObservable)
 }
 
-function getCatalogHTML(code, callback) {
-	var baseUrl = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
-	var url = baseUrl + '?kKod=' + code
-	var catalogHTML = getUrl(url, callback)
-}
-
-function getUrl(url, callback) {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-			callback(xmlHttp.responseText);
-		}
-	}
-	xmlHttp.open("GET", url, true);
-	xmlHttp.send(null);
-}
-
 function generateTable(courseList) {
+
+	//TODO: Have a class for the final presentation of the data
+	// Keeps tableData as instance variables
+	// Has a method addToTable()
 
 	var tableData = {
 		total: 0,
@@ -145,37 +137,22 @@ function generateTable(courseList) {
 		cs: 0
 	}
 
-	var rs = Rx.Observable
-		.from(courseList)
-		.flatMap(courseEntry => getCourseInfoObservable(courseEntry.code))
-		.subscribe(courseHTML => console.log(courseHTML))
-
-	var courseEntriesRemaining = courseList.length;
-
-	for (var i=0; i<courseList.length; i++) {
-		var courseEntry = courseList[i]
-		var code = courseEntry.code
-		if (!courseEntry.isCompleted) {
-			courseEntriesRemaining--
-			continue
-		}
-		//TODO: Create ajax observables
-		// Merge, flatmap, zip?
-		// Make a function which takes html and create a courseInfo object
-		getCatalogHTML(code, function(html) {
-			var stats = htmlToStats(html);
-			tableData.total += stats.points;
-			tableData.adv += stats.adv*stats.points;
-			tableData.tech += stats.tech*stats.points;
-			tableData.advTech += stats.adv_tech*stats.points;
-			tableData.cs += stats.cs*stats.points;
-			courseEntriesRemaining--;
-			if (courseEntriesRemaining <= 0) {
-				populateTable(tableData);
-			}
-		});
+	function addToTable(stats) {
+		console.log(stats.points)
+		tableData.total += stats.points;
+		tableData.adv += stats.adv*stats.points;
+		tableData.tech += stats.tech*stats.points;
+		tableData.advTech += stats.adv_tech*stats.points;
+		tableData.cs += stats.cs*stats.points;
 	}
 
+	var rs = Rx.Observable
+		.from(courseList)
+		.flatMap(courseEntry => getCourseStatsObservable(courseEntry))
+		.subscribe({
+			next: courseStats => addToTable(courseStats),
+			complete: () => populateTable(tableData)
+		})
 }
 
 // Notify the content script when the page action is clicked
@@ -183,7 +160,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	setPlaceholderSize();
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, {clicked: true}, function(response) {
-			//loopCourses(response.courseList)
 			generateTable(response.courseList)
 		});
 	});
