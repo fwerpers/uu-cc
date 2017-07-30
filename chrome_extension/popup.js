@@ -66,7 +66,7 @@ function getCourseStats(html, courseEntry) {
 
 	// Retrieve credits
 	if (!courseEntry.isCompleted) {
-		stats.points = 0
+		stats.points = Number(courseEntry.credits.split(' ')[0])
 	} else {
 		var point_item = fact_list[0];
 		var point_str = point_item.firstElementChild.innerHTML.trim();
@@ -138,7 +138,6 @@ function generateTable(courseList) {
 	}
 
 	function addToTable(stats) {
-		console.log(stats.points)
 		tableData.total += stats.points;
 		tableData.adv += stats.adv*stats.points;
 		tableData.tech += stats.tech*stats.points;
