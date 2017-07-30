@@ -38,14 +38,14 @@ function setPlaceholderSize() {
 
 }
 
-function populateTable(tableData) {
+function populateTable(courseSummary) {
 	var table = getPopupTable()
 
-	table.rows[1].cells[1].innerHTML = tableData.total;
-	table.rows[2].cells[1].innerHTML = tableData.tech;
-	table.rows[3].cells[1].innerHTML = tableData.cs;
-	table.rows[4].cells[1].innerHTML = tableData.adv;
-	table.rows[5].cells[1].innerHTML = tableData.advTech;
+	table.rows[1].cells[1].innerHTML = courseSummary.total;
+	table.rows[2].cells[1].innerHTML = courseSummary.tech;
+	table.rows[3].cells[1].innerHTML = courseSummary.cs;
+	table.rows[4].cells[1].innerHTML = courseSummary.adv;
+	table.rows[5].cells[1].innerHTML = courseSummary.advTech;
 
 	hidePlaceholder()
 	showPopupTable()
@@ -123,34 +123,35 @@ function getCourseStatsObservable(courseEntry) {
 	return(courseHTMLObservable)
 }
 
+class CreditsSummary {
+	constructor() {
+		this.total = 0
+		this.adv = 0
+		this.tech = 0
+		this.advTech = 0
+		this.cs = 0
+	}
+
+	addCoursePoints(courseStats) {
+		var points = courseStats.points
+		this.total += points;
+		this.adv += courseStats.adv*points;
+		this.tech += courseStats.tech*points;
+		this.advTech += courseStats.adv_tech*points;
+		this.cs += courseStats.cs*points;
+	}
+}
+
 function generateTable(courseList) {
 
-	//TODO: Have a class for the final presentation of the data
-	// Keeps tableData as instance variables
-	// Has a method addToTable()
-
-	var tableData = {
-		total: 0,
-		adv: 0,
-		tech: 0,
-		advTech: 0,
-		cs: 0
-	}
-
-	function addToTable(stats) {
-		tableData.total += stats.points;
-		tableData.adv += stats.adv*stats.points;
-		tableData.tech += stats.tech*stats.points;
-		tableData.advTech += stats.adv_tech*stats.points;
-		tableData.cs += stats.cs*stats.points;
-	}
+	var creditsSummary = new CreditsSummary()
 
 	Rx.Observable
 		.from(courseList)
 		.flatMap(courseEntry => getCourseStatsObservable(courseEntry))
 		.subscribe({
-			next: courseStats => addToTable(courseStats),
-			complete: () => populateTable(tableData)
+			next: courseStats => creditsSummary.addCoursePoints(courseStats),
+			complete: () => populateTable(creditsSummary)
 		})
 }
 
