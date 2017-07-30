@@ -145,7 +145,7 @@ function generateTable(courseList) {
 		tableData.cs += stats.cs*stats.points;
 	}
 
-	var rs = Rx.Observable
+	Rx.Observable
 		.from(courseList)
 		.flatMap(courseEntry => getCourseStatsObservable(courseEntry))
 		.subscribe({
