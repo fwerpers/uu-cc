@@ -51,15 +51,15 @@ class CourseEntry {
 	}
 }
 
-window.onload = function() {
-    var app = new Vue({
-        el: '#vue_test',
-        data: {
-            message: 'You loaded this page on ' + new Date(),
-            visible: true
-        }
-    })
-}
+// window.onload = function() {
+//     var app = new Vue({
+//         el: '#vue_test',
+//         data: {
+//             message: 'You loaded this page on ' + new Date(),
+//             visible: true
+//         }
+//     })
+// }
 
 function isCourseEntry(row) {
 
