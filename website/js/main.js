@@ -78,7 +78,7 @@ function isResultFromIncomplete(row) {
     }
 }
 
-function calculate() {
+function analyze() {
     var input = document.getElementById('course_input').value
     courseTable = new CourseTableModel(input)
 
