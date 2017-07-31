@@ -2,6 +2,7 @@
 <head>
     <script src="https://unpkg.com/vue"></script>
     <script src="js/main.js"></script>
+    <script type="text/javascript" src="js/rx.js"></script>
     <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
@@ -11,5 +12,35 @@
     <a id="runButton" onclick='analyze()'>
         Calculate
     </a>
+
+    <div id="placeholder">
+		<div id="loader_container">
+			<div id="loader"></div>
+		</div>
+        <table id="hp_table">
+    		<tr>
+    			<th>Desciption</th>
+    			<th>Credits</th>
+    		</tr>
+    		<tr>
+    			<td>Total</td>
+    			<td></td>
+    		</tr>
+    			<td>Tech</td>
+    			<td></td>
+    		<tr>
+    			<td nowrap>Computer science</td>
+    			<td></td>
+    		</tr>
+    		<tr>
+    			<td>Advanced</td>
+    			<td></td>
+    		</tr>
+    		<tr>
+    			<td>Advanced tech</td>
+    			<td></td>
+    		</tr>
+    	</table>
+	</div>
 </body>
 </html>
