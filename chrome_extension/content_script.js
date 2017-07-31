@@ -1,7 +1,5 @@
 class CourseTableModel {
-	constructor() {
-		var tables = document.getElementsByTagName('table')
-		var tableElement = tables[tables.length-1]
+	constructor(tableElement) {
 		var tableRows = tableElement.getElementsByTagName('tr')
 
 		this.courseList = []
@@ -43,8 +41,15 @@ class CourseEntry {
 	}
 }
 
+function findTableElement() {
+	var tables = document.getElementsByTagName('table')
+	var tableElement = tables[tables.length-1]
+	return(tableElement)
+}
+
 function createResponse() {
-	courseTableModel = new CourseTableModel()
+	var tableElement = findTableElement()
+	courseTableModel = new CourseTableModel(tableElement)
 	courseList = courseTableModel.courseList
 	response = {courseList: courseList}
 	return(response)
