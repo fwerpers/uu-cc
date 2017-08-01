@@ -6,11 +6,25 @@ import (
     "html/template"
     "strconv"
     "flag"
+    "fmt"
+    "io/ioutil"
 )
 
 func MainGetHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
     t,_ := template.ParseFiles("static/main.html")
     t.Execute(w, nil)
+}
+
+func CourseInfoHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    baseUrl := "http://www.uu.se/utbildning/utbildningar/selma/kursplan/"
+    params := r.URL.Query()
+    code := params.Get("code")
+    url := baseUrl + "?kKod=" + code
+    resp, _ := http.Get(url)
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf(string(body))
+    //TODO: Get HTML from UU and return
+    fmt.Fprintf(w, string(body))
 }
 
 func main() {
@@ -19,6 +33,7 @@ func main() {
 
     // GET handler
     router.GET("/", MainGetHandle)
+    router.GET("/api", CourseInfoHandle)
     router.ServeFiles("/static/*filepath", http.Dir("static"))
 
     // Parse flags
