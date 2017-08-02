@@ -8,11 +8,14 @@ class CourseTableModel {
             var row = rows[i]
 
             if (!isCourseEntry(row)) {
+                console.log("Not an entry");
                 continue
             }
 
+            console.log("An entry");
+
             var cells = row.split('\t')
-            if (cells.length == 5) {
+            if (cells.length == 6) {
                 var isCompleted = true
     			var code = cells[0]
     			var name = cells[1]
@@ -218,7 +221,6 @@ class CreditsSummary {
 		this.tech += courseStats.tech*points;
 		this.advTech += courseStats.adv_tech*points;
 		this.cs += courseStats.cs*points;
-        console.log(this);
 	}
 }
 
@@ -240,7 +242,6 @@ function analyze() {
     var input = document.getElementById('course_input').value
     courseTable = new CourseTableModel(input)
     showTable(courseTable)
-
     console.log(courseTable.courseList);
 }
 
