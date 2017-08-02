@@ -289,9 +289,7 @@ function checkForIncompleteCourses(text) {
         PATTERNS.DONT_CARE,
         PATTERNS.CREDITS,
         PATTERNS.DONT_CARE,
-        PATTERNS.GRADE,
-        PATTERNS.DONT_CARE,
-        PATTERNS.DONT_CARE,
+        PATTERNS.GRADE
     ].join('\\t')
     var pattern = [firstSubPattern, secondSubPattern].join('\\n')
     var completeCourseRegex = new RegExp(pattern, 'g')
