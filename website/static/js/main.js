@@ -1,7 +1,7 @@
 const PATTERNS = {
-    COURSE_CODE: '\\d{1}[A-Z]{2}\\d{3}',
-    CREDITS: '\\d+(?:.\\d)?\\s(?:c|hp)',
-    GRADE: '[G345]',
+    COURSE_CODE: '(\\d{1}[A-Z]{2}\\d{3})',
+    CREDITS: '(\\d+(?:.\\d)?\\s(?:c|hp))',
+    GRADE: '([G345])',
     DONT_CARE: '[^\\t\\n]+'
 }
 
