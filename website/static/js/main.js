@@ -5,48 +5,56 @@ const PATTERNS = {
     DONT_CARE: '[^\\t\\n]+'
 }
 
+const COMPLETE_COURSE_PATTERN = [
+    PATTERNS.COURSE_CODE,
+    PATTERNS.DONT_CARE,
+    PATTERNS.CREDITS,
+    PATTERNS.DONT_CARE,
+    PATTERNS.GRADE
+].join('\\t')
+
+const INCOMPLETE_COURSE_PATTERN = [
+    [
+        PATTERNS.COURSE_CODE,
+        PATTERNS.DONT_CARE,
+        PATTERNS.DONT_CARE
+    ].join('\\t'),
+    [
+        PATTERNS.DONT_CARE,
+        PATTERNS.DONT_CARE,
+        PATTERNS.CREDITS,
+        PATTERNS.DONT_CARE,
+        PATTERNS.GRADE
+    ].join('\\t')
+].join('\\n')
+
 class CourseTableModel {
     constructor(tableText) {
         this.courseList = []
+        this.courseList = this.courseList.concat(CourseTableModel.parseCourseEntries(tableText, true))
+        this.courseList = this.courseList.concat(CourseTableModel.parseCourseEntries(tableText, false))
+    }
 
-        var rows = tableText.split('\n')
-
-        for (var i=0; i<rows.length; i++) {
-            var row = rows[i]
-
-            if (!isCourseEntry(row)) {
-                console.log("Not an entry");
-                continue
-            }
-
-            console.log("An entry");
-
-            var cells = row.split('\t')
-            if (cells.length == 6) {
-                var isCompleted = true
-    			var code = cells[0]
-    			var name = cells[1]
-    			var credits = cells[2]
-    			var date = cells[3]
-    			var grade = cells[4]
-            } else if (cells.length == 3 && i <= rows.length-1) {
-                var nextRow = rows[i+1]
-                if (!isResultFromIncomplete(nextRow)) {
-                    continue
-                }
-                var nextRowCells = nextRow.split('\t')
-                var isCompleted = false
-    			var code = cells[0]
-    			var name = cells[1]
-    			var credits = nextRowCells[2]
-    			var date = nextRowCells[3]
-    			var grade = nextRowCells[4]
-            } else {
-                continue
-            }
-
-            this.courseList.push(new CourseEntry(code, name, credits, date, grade, isCompleted))
+    static parseCourseEntries(tableText, isCompleted) {
+        var pattern
+        if (isCompleted) {
+            pattern = COMPLETE_COURSE_PATTERN
+        } else {
+            pattern = INCOMPLETE_COURSE_PATTERN
         }
+        var courseEntries = []
+        var regex = new RegExp(pattern, 'g')
+        var resultArray
+        while((resultArray = regex.exec(tableText)) != null) {
+            var code = resultArray[1]
+            var name = "PLACEHOLDER_NAME"
+            var credits = resultArray[2]
+            var date = "PLACEHOLDER_DATE"
+            var grade = resultArray[3]
+            courseEntries.push(new CourseEntry(code, name, credits, date, grade, isCompleted))
+        }
+
+        return(courseEntries)
     }
 }
 
@@ -59,23 +67,6 @@ class CourseEntry {
 		this.grade = grade
 		this.isCompleted = isCompleted
 	}
-}
-
-function isCourseEntry(row) {
-
-    var cells = row.split('\t')
-
-    var courseCodeRegex = /\d{1}[A-Z]{2}\d{3}/
-    return(courseCodeRegex.test(cells[0]))
-}
-
-function isResultFromIncomplete(row) {
-    var cells = row.split('\t')
-    if (cells.length == 7) {
-        return(true)
-    } else {
-        return(false)
-    }
 }
 
 function showTable(courseTable) {
@@ -248,58 +239,14 @@ function analyze() {
 
     showLoader()
     var input = document.getElementById('course_input').value
-    checkForCompleteCourses(input)
-    checkForIncompleteCourses(input)
 
-    // courseTable = new CourseTableModel(input)
-    // showTable(courseTable)
+    courseTable = new CourseTableModel(input)
+    showTable(courseTable)
     // console.log(courseTable.courseList);
 }
 
 function onTextAreaChange() {
     console.log("CHANGE");
-}
-
-function checkForCompleteCourses(text) {
-    var pattern = [
-        PATTERNS.COURSE_CODE,
-        PATTERNS.DONT_CARE,
-        PATTERNS.CREDITS,
-        PATTERNS.DONT_CARE,
-        PATTERNS.GRADE
-    ].join('\\t')
-    var completeCourseRegex = new RegExp(pattern, 'g')
-    var resultArray
-    var counter = 0
-    while((resultArray = completeCourseRegex.exec(text)) != null) {
-        console.log(resultArray[0]);
-        counter++
-    }
-    console.log(counter);
-}
-
-function checkForIncompleteCourses(text) {
-    var firstSubPattern = [
-        PATTERNS.COURSE_CODE,
-        PATTERNS.DONT_CARE,
-        PATTERNS.DONT_CARE
-    ].join('\\t')
-    var secondSubPattern = [
-        PATTERNS.DONT_CARE,
-        PATTERNS.DONT_CARE,
-        PATTERNS.CREDITS,
-        PATTERNS.DONT_CARE,
-        PATTERNS.GRADE
-    ].join('\\t')
-    var pattern = [firstSubPattern, secondSubPattern].join('\\n')
-    var completeCourseRegex = new RegExp(pattern, 'g')
-    var resultArray
-    var counter = 0
-    while((resultArray = completeCourseRegex.exec(text)) != null) {
-        console.log(resultArray[0]);
-        counter++
-    }
-    console.log(counter);
 }
 
 // window.onload = function() {
