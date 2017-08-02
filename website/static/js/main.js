@@ -245,6 +245,10 @@ function analyze() {
     console.log(courseTable.courseList);
 }
 
+function onTextAreaChange() {
+    console.log("CHANGE");
+}
+
 // window.onload = function() {
 //     var app = new Vue({
 //         el: '#vue_test',

@@ -12,12 +12,105 @@
         <li>Hit ctrl/cmd + A</li>
         <li>Paste here</li>
     </ol>
-    <textarea id="course_input" rows="20" cols="100">1MA090	Algebra and Geometry	5 c	2012-10-25	4
+    <textarea
+        id="course_input" rows="20" cols="100"
+        oninput="onTextAreaChange()">
+logotyp Student Portal
+ You are logged on as: Felix Verpers   	 LOG OFF
+START
+MY STUDIES
+MY SCHEDULE
+MY SERVICES
+MY PROFILE
+NEWS
+HELP
+SEARCH
+ Read aloud  Read aloud  Svenska
+My studies
+Assignments
+Degree application
+Examination registration
+Information about Uppdok
+Portfolio
+Progress
+Registrations
+Request grade transcript
+Study results
+PASSING RESULTS
+Contact the relevant department if the information is incorrect.
+
+The current credit system is in force as of July 1, 2007. Please note: credits for courses have been converted for courses/examinations started before July 2007 as well. Any writing credits appear after the grade (in parentheses)
+
+Show all study results
+
+Completed courses
+
+1MA090	Algebra and Geometry	5 c	2012-10-25	4
 1MA013	Single Variable Calculus	10 c	2012-12-17	4
-1TD393	Scientific Computing I	5 c	2013-01-02	3</textarea>
-    <a id="runButton" onclick='analyze()'>
+1TD393	Scientific Computing I	5 c	2013-01-02	3
+1TE609	Introduction to Engineering Physics	5 c	2013-01-04	G
+1FA105	Mechanics Basic Course	10 c	2013-03-19	3
+1MA016	Several Variable Calculus	10 c	2013-05-28	3
+1FA514	Electromagnetism I	5 c	2013-05-31	4
+1FA513	Measuring Techniques	5 c	2013-08-19	4
+1FA102	Mechanics II	5 c	2013-08-30	3
+1TE624	Electronics I	5 c	2013-11-05	4
+1MA034	Transform Methods	5 c	2013-11-14	5
+1TE626	Electromagnetism II	5 c	2013-12-17	5
+1FA103	Mechanics III	5 c	2014-02-05	3
+1TE625	Presentation Techniques	5 c	2014-02-14	5
+1MA024	Linear Algebra II	5 c	2014-03-11	4
+1FA522	Waves and Optics	5 c	2014-03-14	3
+1TD433	Computer Programming I	5 c	2014-03-28	4
+1TE623	Energy and Environmental Technology	5 c	2014-05-26	3
+1TD395	Scientific Computing II	5 c	2014-06-10	3
+1FA121	Mathematical Methods of Physics	5 c	2014-06-12	5
+1DT047	Peer-to-Peer Computing	7.5 c	2014-08-29	3
+1MS005	Probability and Statistics	5 c	2014-10-20	5
+1TE661	Signals and Systems	5 c	2014-10-31	4
+1RT490	Automatic Control I	5 c	2014-12-15	4
+1DL300	Database Design I	5 c	2015-01-07	4
+1FA521	Quantum Physics	10 c	2015-01-16	3
+1MD002	User Interface Programming I	5 c	2015-03-10	4
+1TD397	Scientific Computing III	5 c	2015-03-27	4
+1TE725	Analogue Electronics	5 c	2015-04-08	3
+1TD351	High Performance Computing and Programming	5 c	2015-07-31	3
+1FA527	Technical Thermodynamics	5 c	2015-08-25	3
+1TD722	Computer Programming II	5 c	2015-08-28	5
+1DT038	Computer Architecture I	5 c	2015-10-14	4
+1RT495	Automatic Control II	5 c	2015-10-21	4
+1DL360	Data Mining I	5 c	2015-10-23	4
+1TE039	Semiconductor Electronics	5 c	2015-10-28	3
+1FA329	PC-Board Construction with ECAD Tools	5 c	2015-12-14	4
+1TD184	Optimisation	5 c	2016-01-15	3
+1TE723	Microcontroller Programming	5 c	2016-03-23	5
+1DT044	Operating Systems I	5 c	2016-03-25	3
+1TD480	Programming of Parallel Computers	10 c	2016-04-11	3
+1TE718	Electromechanical Project	5 c	2016-05-25	4
+1RT885	System Identification	5 c	2016-07-01	5
+2FE025	Business Studies, Basic Course A/B	5 c	2016-08-15	5
+1TE651	Signal Processing	10 c	2016-08-15	5
+1DT004	Real Time Systems	10 c	2016-10-24	3
+1TE722	Open Advanced Course in Embedded Systems	5 c	2016-11-08	G
+1DL340	Artificial Intelligence	5 c	2016-11-18	3
+1TE721	Project in Embedded Systems	15 c	2017-01-13	5
+1MD032	Intelligent Interactive Systems	5 c	2017-06-02	5
+1RT700	Statistical Machine Learning	5 c	2017-06-09	4
+1TD398	Computer-Assisted Image Analysis II	10 c	2017-06-12	4
+Examinations/components in incomplete courses
+
+1TD388	Computer Graphics (10 c)
+ 	Written Examination	4 c	2015-05-26	4	  	(27)
+1TD396	Computer-Assisted Image Analysis I (5 c)
+ 	Written examination	3 c	2015-12-14	4	  	(33,5)
+1TD253	Finite Element Methods (5 c)
+ 	Assignments	2 c	2016-02-08	G
+UPPSALA UNIVERSITET 2016 | Support: servicedesk@uu.se (student), support-elarande@uadm.uu.se (employee) | Version: 61.0 Release Notes
+
+</textarea>
+    <button id="runButton" onclick='analyze()'>
         Calculate
-    </a>
+    </button>
 
     <div id="placeholder">
 		<div id="loader_container">
