@@ -8,6 +8,7 @@ textarea {
 
 #hp_table {
 	width: auto;
+    display: none;
 }
 
 th, td {
@@ -38,6 +39,7 @@ th, td {
 #loader_container {
 	display: table-cell;
   	vertical-align: middle;
+    display: none;
 }
 
 @-webkit-keyframes spin {

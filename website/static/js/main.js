@@ -51,16 +51,6 @@ class CourseEntry {
 	}
 }
 
-// window.onload = function() {
-//     var app = new Vue({
-//         el: '#vue_test',
-//         data: {
-//             message: 'You loaded this page on ' + new Date(),
-//             visible: true
-//         }
-//     })
-// }
-
 function isCourseEntry(row) {
 
     var cells = row.split('\t')
@@ -79,7 +69,7 @@ function isResultFromIncomplete(row) {
 }
 
 function showTable(courseTable) {
-    setPlaceholderSize();
+    setLoaderSize();
     generateTable(courseTable.courseList)
 }
 
@@ -98,18 +88,23 @@ function showPopupTable() {
 	table.style.display = 'inline'
 }
 
-function getPlaceholder() {
-	var placeholder = document.getElementById('placeholder')
-	return(placeholder)
+function getLoader() {
+	var loader = document.getElementById('loader_container')
+	return(loader)
 }
 
-function hidePlaceholder() {
-	var placeholder = getPlaceholder()
-	placeholder.style.display = 'none';
+function hideLoader() {
+	var loader = getLoader()
+	loader.style.display = 'none';
 }
 
-function setPlaceholderSize() {
-	var placeholder = getPlaceholder()
+function showLoader() {
+    var loader = getLoader()
+	loader.style.display = 'table';
+}
+
+function setLoaderSize() {
+	var loader = getLoader()
 	var table = getPopupTable()
 	var size = {
 		width: table.offsetWidth,
@@ -117,8 +112,8 @@ function setPlaceholderSize() {
 	}
 	hidePopupTable()
 
-	placeholder.style.width = String(size.width) + 'px';
-	placeholder.style.height = String(size.height) + 'px';
+	loader.style.width = String(size.width) + 'px';
+	loader.style.height = String(size.height) + 'px';
 
 }
 
@@ -131,7 +126,7 @@ function populateTable(courseSummary) {
 	table.rows[4].cells[1].innerHTML = courseSummary.adv;
 	table.rows[5].cells[1].innerHTML = courseSummary.advTech;
 
-	hidePlaceholder()
+	hideLoader()
 	showPopupTable()
 }
 
@@ -198,9 +193,9 @@ function getCourseStats(html, courseEntry) {
 }
 
 function getCourseStatsObservable(courseEntry) {
-	var baseUrl = 'http://www.uu.se/utbildning/utbildningar/selma/kursplan/'
+	var baseUrl = 'http://localhost:8080/api'
 	var code = courseEntry.code
-	var url = baseUrl + '?kKod=' + code
+	var url = baseUrl + '?code=' + code
 	var courseHTMLObservable = Rx.Observable
 		.ajax({url: url, method: 'GET', responseType: 'text', crossDomain: false})
 		.map(data => getCourseStats(data.response, courseEntry))
@@ -223,6 +218,7 @@ class CreditsSummary {
 		this.tech += courseStats.tech*points;
 		this.advTech += courseStats.adv_tech*points;
 		this.cs += courseStats.cs*points;
+        console.log(this);
 	}
 }
 
@@ -240,9 +236,20 @@ function generateTable(courseList) {
 }
 
 function analyze() {
+    showLoader()
     var input = document.getElementById('course_input').value
     courseTable = new CourseTableModel(input)
     showTable(courseTable)
 
     console.log(courseTable.courseList);
 }
+
+// window.onload = function() {
+//     var app = new Vue({
+//         el: '#vue_test',
+//         data: {
+//             message: 'You loaded this page on ' + new Date(),
+//             visible: true
+//         }
+//     })
+// }
