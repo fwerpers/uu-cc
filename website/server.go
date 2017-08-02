@@ -22,8 +22,7 @@ func CourseInfoHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Para
     url := baseUrl + "?kKod=" + code
     resp, _ := http.Get(url)
     body, _ := ioutil.ReadAll(resp.Body)
-    fmt.Printf(string(body))
-    //TODO: Get HTML from UU and return
+    fmt.Printf(code + " done.\n")
     fmt.Fprintf(w, string(body))
 }
 
