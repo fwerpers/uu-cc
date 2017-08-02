@@ -1,3 +1,10 @@
+const PATTERNS = {
+    COURSE_CODE: '\\d{1}[A-Z]{2}\\d{3}',
+    CREDITS: '\\d+(?:.\\d)?\\s(?:c|hp)',
+    GRADE: '[G345]',
+    DONT_CARE: '[^\\t\\n]+'
+}
+
 class CourseTableModel {
     constructor(tableText) {
         this.courseList = []
@@ -238,15 +245,63 @@ function generateTable(courseList) {
 }
 
 function analyze() {
+
     showLoader()
     var input = document.getElementById('course_input').value
-    courseTable = new CourseTableModel(input)
-    showTable(courseTable)
-    console.log(courseTable.courseList);
+    checkForCompleteCourses(input)
+    checkForIncompleteCourses(input)
+
+    // courseTable = new CourseTableModel(input)
+    // showTable(courseTable)
+    // console.log(courseTable.courseList);
 }
 
 function onTextAreaChange() {
     console.log("CHANGE");
+}
+
+function checkForCompleteCourses(text) {
+    var pattern = [
+        PATTERNS.COURSE_CODE,
+        PATTERNS.DONT_CARE,
+        PATTERNS.CREDITS,
+        PATTERNS.DONT_CARE,
+        PATTERNS.GRADE
+    ].join('\\t')
+    var completeCourseRegex = new RegExp(pattern, 'g')
+    var resultArray
+    var counter = 0
+    while((resultArray = completeCourseRegex.exec(text)) != null) {
+        console.log(resultArray[0]);
+        counter++
+    }
+    console.log(counter);
+}
+
+function checkForIncompleteCourses(text) {
+    var firstSubPattern = [
+        PATTERNS.COURSE_CODE,
+        PATTERNS.DONT_CARE,
+        PATTERNS.DONT_CARE
+    ].join('\\t')
+    var secondSubPattern = [
+        PATTERNS.DONT_CARE,
+        PATTERNS.DONT_CARE,
+        PATTERNS.CREDITS,
+        PATTERNS.DONT_CARE,
+        PATTERNS.GRADE,
+        PATTERNS.DONT_CARE,
+        PATTERNS.DONT_CARE,
+    ].join('\\t')
+    var pattern = [firstSubPattern, secondSubPattern].join('\\n')
+    var completeCourseRegex = new RegExp(pattern, 'g')
+    var resultArray
+    var counter = 0
+    while((resultArray = completeCourseRegex.exec(text)) != null) {
+        console.log(resultArray[0]);
+        counter++
+    }
+    console.log(counter);
 }
 
 // window.onload = function() {
