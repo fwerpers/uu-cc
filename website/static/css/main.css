@@ -15,7 +15,7 @@ textarea {
 th, td {
 	text-align: left;
 	padding: 0 0.4em;
-	font-size: 1.25em;
+	/*font-size: 1.25em;*/
 }
 
 #loader {
