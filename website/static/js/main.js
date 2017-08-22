@@ -144,14 +144,6 @@ class Course {
 function getCourseStats(html, courseEntry) {
     course = new Course()
 
-	var stats = {
-		points: 0,
-		adv: false,
-		tech: false,
-		adv_tech: false,
-		cs: false
-	}
-
 	var el = document.createElement('html');
 	el.innerHTML = html;
 	var fact_list = el.getElementsByClassName('syllabusFacts introductory-note is-unstyled')[0].children;
