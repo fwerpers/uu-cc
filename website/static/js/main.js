@@ -193,14 +193,18 @@ function getCourseStats(html, courseEntry) {
 	return stats;
 }
 
-function getCourseStatsObservable(courseEntry) {
-	var baseUrl = 'http://localhost:8080/api'
-	var code = courseEntry.code
-	var url = baseUrl + '?code=' + code
-	var courseHTMLObservable = Rx.Observable
+function getCourseHTMLObservable(courseCode) {
+    var baseUrl = 'http://localhost:8080/api'
+	var url = baseUrl + '?code=' + courseCode
+    var courseHTMLObservable = Rx.Observable
 		.ajax({url: url, method: 'GET', responseType: 'text', crossDomain: false})
+    return(courseHTMLObservable)
+}
+
+function getCourseStatsObservable(courseEntry) {
+	var courseStatsObservable = getCourseHTMLObservable(courseEntry.code)
 		.map(data => getCourseStats(data.response, courseEntry))
-	return(courseHTMLObservable)
+	return(courseStatsObservable)
 }
 
 class CreditsSummary {
@@ -240,14 +244,18 @@ function analyze() {
     showLoader()
     var input = document.getElementById('course_input').value
 
+    console.log(JSON.stringify(input));
+
     courseTable = new CourseTableModel(input)
     showTable(courseTable)
-    // console.log(courseTable.courseList);
 }
 
 function onTextAreaChange() {
     console.log("CHANGE");
 }
+
+// Exports for testing
+exports.CourseTableModel = CourseTableModel
 
 // window.onload = function() {
 //     var app = new Vue({
