@@ -131,7 +131,19 @@ function populateTable(courseSummary) {
 	showPopupTable()
 }
 
+class Course {
+    constructor() {
+        this.points = 0
+        this.adv = false
+        this.tech = false
+        this.advTech = false
+        this.cs = false
+    }
+}
+
 function getCourseStats(html, courseEntry) {
+    course = new Course()
+
 	var stats = {
 		points: 0,
 		adv: false,
@@ -146,11 +158,11 @@ function getCourseStats(html, courseEntry) {
 
 	// Retrieve credits
 	if (!courseEntry.isCompleted) {
-		stats.points = Number(courseEntry.credits.split(' ')[0])
+		course.points = Number(courseEntry.credits.split(' ')[0])
 	} else {
 		var point_item = fact_list[0];
 		var point_str = point_item.firstElementChild.innerHTML.trim();
-		stats.points = Number(point_str.split(' ')[0].replace(',','.'));
+		course.points = Number(point_str.split(' ')[0].replace(',','.'));
 	}
 
 	// Retrieve level
@@ -178,19 +190,19 @@ function getCourseStats(html, courseEntry) {
 
 	// Distribute points according to subjects and level
 	if (level == 'A') {
-		stats.adv = true;
+		course.adv = true;
 	}
 	if (is_tech) {
-		stats.tech = true;
+		course.tech = true;
 	}
 	if (level == 'A' && is_tech) {
-		stats.adv_tech = true;
+		course.advTech = true;
 	}
 	if (is_cs) {
-		stats.cs = true;
+		course.cs = true;
 	}
 
-	return stats;
+	return(course);
 }
 
 function getCourseHTMLObservable(courseCode) {
@@ -221,7 +233,7 @@ class CreditsSummary {
 		this.total += points;
 		this.adv += courseStats.adv*points;
 		this.tech += courseStats.tech*points;
-		this.advTech += courseStats.adv_tech*points;
+		this.advTech += courseStats.advTech*points;
 		this.cs += courseStats.cs*points;
 	}
 }
