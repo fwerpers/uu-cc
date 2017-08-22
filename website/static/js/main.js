@@ -51,14 +51,14 @@ class CourseTableModel {
             var credits = resultArray[2]
             var date = "PLACEHOLDER_DATE"
             var grade = resultArray[3]
-            courseEntries.push(new CourseEntry(code, name, credits, date, grade, isCompleted))
+            courseEntries.push(new CourseResult(code, name, credits, date, grade, isCompleted))
         }
 
         return(courseEntries)
     }
 }
 
-class CourseEntry {
+class CourseResult {
 	constructor(code, name, credits, date, grade, isCompleted) {
 		this.code = code
 		this.name = name
@@ -193,11 +193,11 @@ function parseCourse(html) {
 	return(course);
 }
 
-function getCourseStats(html, courseEntry) {
+function getCourseStats(html, courseResult) {
     course = parseCourse(html)
 
-	if (!courseEntry.isCompleted) {
-		course.points = Number(courseEntry.credits.split(' ')[0])
+	if (!courseResult.isCompleted) {
+		course.points = Number(courseResult.credits.split(' ')[0])
 	}
 
 	return(course);
@@ -211,9 +211,9 @@ function getCourseHTMLObservable(courseCode) {
     return(courseHTMLObservable)
 }
 
-function getCourseStatsObservable(courseEntry) {
-	var courseStatsObservable = getCourseHTMLObservable(courseEntry.code)
-		.map(data => getCourseStats(data.response, courseEntry))
+function getCourseStatsObservable(courseResult) {
+	var courseStatsObservable = getCourseHTMLObservable(courseResult.code)
+		.map(data => getCourseStats(data.response, courseResult))
 	return(courseStatsObservable)
 }
 
@@ -242,7 +242,7 @@ function generateTable(courseList) {
 
 	Rx.Observable
 		.from(courseList)
-		.flatMap(courseEntry => getCourseStatsObservable(courseEntry))
+		.flatMap(courseResult => getCourseStatsObservable(courseResult))
 		.subscribe({
 			next: courseStats => creditsSummary.addCoursePoints(courseStats),
 			complete: () => populateTable(creditsSummary)
