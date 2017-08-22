@@ -58,6 +58,16 @@ class CourseTableModel {
     }
 }
 
+class Course {
+    constructor() {
+        this.points = 0
+        this.adv = false
+        this.tech = false
+        this.advTech = false
+        this.cs = false
+    }
+}
+
 class CourseResult {
 	constructor(code, name, credits, date, grade, isCompleted) {
 		this.code = code
@@ -129,16 +139,6 @@ function populateTable(courseSummary) {
 
 	hideLoader()
 	showPopupTable()
-}
-
-class Course {
-    constructor() {
-        this.points = 0
-        this.adv = false
-        this.tech = false
-        this.advTech = false
-        this.cs = false
-    }
 }
 
 function parseCourse(html) {
