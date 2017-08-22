@@ -141,23 +141,19 @@ class Course {
     }
 }
 
-function getCourseStats(html, courseEntry) {
+function parseCourse(html) {
     course = new Course()
 
-	var el = document.createElement('html');
+    var el = document.createElement('html');
 	el.innerHTML = html;
 	var fact_list = el.getElementsByClassName('syllabusFacts introductory-note is-unstyled')[0].children;
 
-	// Retrieve credits
-	if (!courseEntry.isCompleted) {
-		course.points = Number(courseEntry.credits.split(' ')[0])
-	} else {
-		var point_item = fact_list[0];
-		var point_str = point_item.firstElementChild.innerHTML.trim();
-		course.points = Number(point_str.split(' ')[0].replace(',','.'));
-	}
+    // Retrieve credits
+    var point_item = fact_list[0];
+    var point_str = point_item.firstElementChild.innerHTML.trim();
+    course.points = Number(point_str.split(' ')[0].replace(',','.'));
 
-	// Retrieve level
+    // Retrieve level
 	var level_item = fact_list[2];
 	level_item.removeChild(level_item.firstElementChild);
 	var level_str = level_item.innerHTML.trim();
@@ -192,6 +188,16 @@ function getCourseStats(html, courseEntry) {
 	}
 	if (is_cs) {
 		course.cs = true;
+	}
+
+	return(course);
+}
+
+function getCourseStats(html, courseEntry) {
+    course = parseCourse(html)
+
+	if (!courseEntry.isCompleted) {
+		course.points = Number(courseEntry.credits.split(' ')[0])
 	}
 
 	return(course);
