@@ -28,34 +28,33 @@ const INCOMPLETE_COURSE_PATTERN = [
     ].join('\\t')
 ].join('\\n')
 
-class CourseTableModel {
-    constructor(tableText) {
-        this.courseList = []
-        this.courseList = this.courseList.concat(CourseTableModel.parseCourseEntries(tableText, true))
-        this.courseList = this.courseList.concat(CourseTableModel.parseCourseEntries(tableText, false))
+function parseAllCourseResults(inputText) {
+    courseList = []
+    courseList = courseList.concat(parseCourseResults(inputText, true))
+    courseList = courseList.concat(parseCourseResults(inputText, false))
+    return(courseList)
+}
+
+function parseCourseResults(inputText, isCompleted) {
+    var pattern
+    if (isCompleted) {
+        pattern = COMPLETE_COURSE_PATTERN
+    } else {
+        pattern = INCOMPLETE_COURSE_PATTERN
+    }
+    var courseEntries = []
+    var regex = new RegExp(pattern, 'g')
+    var resultArray
+    while((resultArray = regex.exec(inputText)) != null) {
+        var code = resultArray[1]
+        var name = "PLACEHOLDER_NAME"
+        var credits = resultArray[2]
+        var date = "PLACEHOLDER_DATE"
+        var grade = resultArray[3]
+        courseEntries.push(new CourseResult(code, name, credits, date, grade, isCompleted, null))
     }
 
-    static parseCourseEntries(tableText, isCompleted) {
-        var pattern
-        if (isCompleted) {
-            pattern = COMPLETE_COURSE_PATTERN
-        } else {
-            pattern = INCOMPLETE_COURSE_PATTERN
-        }
-        var courseEntries = []
-        var regex = new RegExp(pattern, 'g')
-        var resultArray
-        while((resultArray = regex.exec(tableText)) != null) {
-            var code = resultArray[1]
-            var name = "PLACEHOLDER_NAME"
-            var credits = resultArray[2]
-            var date = "PLACEHOLDER_DATE"
-            var grade = resultArray[3]
-            courseEntries.push(new CourseResult(code, name, credits, date, grade, isCompleted))
-        }
-
-        return(courseEntries)
-    }
+    return(courseEntries)
 }
 
 class Course {
@@ -69,19 +68,20 @@ class Course {
 }
 
 class CourseResult {
-	constructor(code, name, credits, date, grade, isCompleted) {
+	constructor(code, name, credits, date, grade, isCompleted, course) {
 		this.code = code
 		this.name = name
 		this.credits = credits
 		this.date = date
 		this.grade = grade
 		this.isCompleted = isCompleted
+        this.course = course
 	}
 }
 
-function showTable(courseTable) {
+function showTable(courseList) {
     setLoaderSize();
-    generateTable(courseTable.courseList)
+    generateTable(courseList)
 }
 
 function getPopupTable() {
@@ -257,8 +257,8 @@ function analyze() {
 
     console.log(JSON.stringify(input));
 
-    courseTable = new CourseTableModel(input)
-    showTable(courseTable)
+    courseList = parseAllCourseResults(input)
+    showTable(courseList)
 }
 
 function onTextAreaChange() {
@@ -266,7 +266,6 @@ function onTextAreaChange() {
 }
 
 // Exports for testing
-exports.CourseTableModel = CourseTableModel
 exports.Course = Course
 exports.parseCourse = parseCourse
 
