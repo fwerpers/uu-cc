@@ -4,10 +4,17 @@ const main = require("../static/js/main.js")
 test('parse non-completed course input', t => {
     var fs = require('fs')
     var input = fs.readFileSync('test/input/noncompleted_course.txt', 'utf8')
-    console.log(JSON.stringify(input));
     var courseList = main.parseNonCompletedCourseResults(input)
     t.true(courseList.length > 0)
     t.is(courseList[0].credits, 4)
+})
+
+test('parse non-completed course with multiple results', t => {
+    var fs = require('fs')
+    var input = fs.readFileSync('test/input/noncompleted_multiple_results.txt', 'utf8')
+    var courseList = main.parseNonCompletedCourseResults(input)
+    t.is(courseList[0].credits, 10)
+    t.is(courseList[1].credits, 11)
 })
 
 test('parse completed course input', t => {
