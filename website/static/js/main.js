@@ -30,19 +30,15 @@ const INCOMPLETE_COURSE_PATTERN = [
 
 function parseAllCourseResults(inputText) {
     courseList = []
-    courseList = courseList.concat(parseCourseResults(inputText, true))
-    courseList = courseList.concat(parseCourseResults(inputText, false))
+
+    courseList = courseList.concat(parseCompletedCourses(inputText))
+    courseList = courseList.concat(parseNonCompletedCourses(inputText))
     return(courseList)
 }
 
-function parseCourseResults(inputText, isCompleted) {
-    var pattern
-    if (isCompleted) {
-        pattern = COMPLETE_COURSE_PATTERN
-    } else {
-        pattern = INCOMPLETE_COURSE_PATTERN
-    }
-    var courseEntries = []
+function parseCompletedCourses(inputText) {
+    var pattern = COMPLETE_COURSE_PATTERN
+    var courseResults = []
     var regex = new RegExp(pattern, 'g')
     var resultArray
     while((resultArray = regex.exec(inputText)) != null) {
@@ -51,10 +47,32 @@ function parseCourseResults(inputText, isCompleted) {
         var credits = resultArray[2]
         var date = "PLACEHOLDER_DATE"
         var grade = resultArray[3]
-        courseEntries.push(new CourseResult(code, name, credits, date, grade, isCompleted, null))
+        courseResults.push(new CourseResult(code, name, credits, date, grade, true, null))
     }
 
-    return(courseEntries)
+    return(courseResults)
+}
+
+function parseNonCompletedCourses(inputText) {
+    var pattern = INCOMPLETE_COURSE_PATTERN
+    var courseResults = []
+    var regex = new RegExp(pattern, 'g')
+    var resultArray
+    while((resultArray = regex.exec(inputText)) != null) {
+        var code = resultArray[1]
+        var name = "PLACEHOLDER_NAME"
+        var credits = resultArray[2]
+        var date = "PLACEHOLDER_DATE"
+        var grade = resultArray[3]
+        courseResults.push(new CourseResult(code, name, credits, date, grade, false, null))
+    }
+
+    return(courseResults)
+}
+
+function parseCredits(creditsString) {
+    var credits = Number(creditsString.split(' ')[0])
+    return(credits)
 }
 
 class Course {
