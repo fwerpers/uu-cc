@@ -13,19 +13,25 @@ const COMPLETE_COURSE_PATTERN = [
     PATTERNS.GRADE
 ].join('\\t')
 
+const INCOMPLETE_COURSE_FIRST_ROW = [
+    PATTERNS.COURSE_CODE,
+    PATTERNS.DONT_CARE,
+    PATTERNS.DONT_CARE
+].join('\\t')
+
+const PARTIAL_RESULT = [
+    PATTERNS.DONT_CARE,
+    PATTERNS.DONT_CARE,
+    PATTERNS.CREDITS,
+    PATTERNS.DONT_CARE,
+    PATTERNS.GRADE,
+    PATTERNS.DONT_CARE,
+    PATTERNS.DONT_CARE
+].join('\\t')
+
 const INCOMPLETE_COURSE_PATTERN = [
-    [
-        PATTERNS.COURSE_CODE,
-        PATTERNS.DONT_CARE,
-        PATTERNS.DONT_CARE
-    ].join('\\t'),
-    [
-        PATTERNS.DONT_CARE,
-        PATTERNS.DONT_CARE,
-        PATTERNS.CREDITS,
-        PATTERNS.DONT_CARE,
-        PATTERNS.GRADE
-    ].join('\\t')
+    INCOMPLETE_COURSE_FIRST_ROW,
+    `(?:${PARTIAL_RESULT}\\n)*${PARTIAL_RESULT}`
 ].join('\\n')
 
 function parseCourseResults(inputText) {
@@ -37,9 +43,8 @@ function parseCourseResults(inputText) {
 }
 
 function parseCompletedCourseResults(inputText) {
-    var pattern = COMPLETE_COURSE_PATTERN
     var courseResults = []
-    var regex = new RegExp(pattern, 'g')
+    var regex = new RegExp(COMPLETE_COURSE_PATTERN, 'g')
     var resultArray
     while((resultArray = regex.exec(inputText)) != null) {
         var code = resultArray[1]
@@ -54,16 +59,18 @@ function parseCompletedCourseResults(inputText) {
 }
 
 function parseNonCompletedCourseResults(inputText) {
-    var pattern = INCOMPLETE_COURSE_PATTERN
     var courseResults = []
-    var regex = new RegExp(pattern, 'g')
+    var courseRegex = new RegExp(INCOMPLETE_COURSE_PATTERN, 'g')
+    var partialResultRegex = new RegExp(PARTIAL_RESULT, 'g')
     var resultArray
-    while((resultArray = regex.exec(inputText)) != null) {
+    while((resultArray = courseRegex.exec(inputText)) != null) {
         var code = resultArray[1]
         var name = "PLACEHOLDER_NAME"
-        var credits = parseCredits(resultArray[2])
-        var date = "PLACEHOLDER_DATE"
-        var grade = resultArray[3]
+        var credits = 0
+        var courseResultString = resultArray[0]
+        while((resultArray = partialResultRegex.exec(courseResultString)) != null) {
+            credits += parseCredits(resultArray[1])
+        }
         courseResults.push(new CourseResult(code, name, credits, null, null, false, null))
     }
 
@@ -272,8 +279,6 @@ function analyze() {
 
     showLoader()
     var input = document.getElementById('course_input').value
-
-    console.log(JSON.stringify(input));
 
     courseList = parseCourseResults(input)
     showTable(courseList)
