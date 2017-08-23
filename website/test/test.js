@@ -1,9 +1,9 @@
 import test from 'ava';
+const main = require("../static/js/main.js")
 
 test('parse incomplete course input', t => {
     var input = "1TD396\tDatoriserad bildanalys I (5 hp)\t \n \tSkriftligt prov\t3 hp\t2015-12-14\t4\t  \t(33,5)\n \tInlämningsuppgifter\t2 hp\t2017-07-04\tG\t  \t "
 
-    var main = require("../static/js/main.js")
     var courseTable = new main.CourseTableModel(input)
     console.log(courseTable);
     var courseList = courseTable.courseList
@@ -16,7 +16,16 @@ test.skip('parse course html', t => {
     var fs = require('fs')
     var html = fs.readFileSync('test/input/course.html', 'utf8')
     console.log(html);
-    t.pass();
+    var course = new main.Course()
+    course.points = 5
+    course.adv = true
+    course.tech = true
+    course.advTech = true
+    course.cs = true
+
+    var parsedCourse = main.parseCourse(html)
+
+    t.is(parsedCourse, course)
 })
 
 test.skip('request course data', t => {
