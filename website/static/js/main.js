@@ -44,7 +44,7 @@ function parseCompletedCourseResults(inputText) {
     while((resultArray = regex.exec(inputText)) != null) {
         var code = resultArray[1]
         var name = "PLACEHOLDER_NAME"
-        var credits = resultArray[2]
+        var credits = parseCredits(resultArray[2])
         var date = "PLACEHOLDER_DATE"
         var grade = resultArray[3]
         courseResults.push(new CourseResult(code, name, credits, date, grade, true, null))
