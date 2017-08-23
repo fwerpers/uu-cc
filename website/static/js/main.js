@@ -64,7 +64,7 @@ function parseNonCompletedCourseResults(inputText) {
         var credits = parseCredits(resultArray[2])
         var date = "PLACEHOLDER_DATE"
         var grade = resultArray[3]
-        courseResults.push(new CourseResult(code, name, credits, date, grade, false, null))
+        courseResults.push(new CourseResult(code, name, credits, null, null, false, null))
     }
 
     return(courseResults)
