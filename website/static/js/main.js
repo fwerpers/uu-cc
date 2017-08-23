@@ -286,6 +286,8 @@ function onTextAreaChange() {
 // Exports for testing
 exports.Course = Course
 exports.parseCourseResults = parseCourseResults
+exports.parseNonCompletedCourseResults = parseNonCompletedCourseResults
+exports.parseCompletedCourseResults = parseCompletedCourseResults
 exports.parseCourse = parseCourse
 exports.parseCredits = parseCredits
 
