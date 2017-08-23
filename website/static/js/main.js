@@ -28,15 +28,15 @@ const INCOMPLETE_COURSE_PATTERN = [
     ].join('\\t')
 ].join('\\n')
 
-function parseAllCourseResults(inputText) {
+function parseCourseResults(inputText) {
     courseList = []
 
-    courseList = courseList.concat(parseCompletedCourses(inputText))
-    courseList = courseList.concat(parseNonCompletedCourses(inputText))
+    courseList = courseList.concat(parseCompletedCourseResults(inputText))
+    courseList = courseList.concat(parseNonCompletedCourseResults(inputText))
     return(courseList)
 }
 
-function parseCompletedCourses(inputText) {
+function parseCompletedCourseResults(inputText) {
     var pattern = COMPLETE_COURSE_PATTERN
     var courseResults = []
     var regex = new RegExp(pattern, 'g')
@@ -53,7 +53,7 @@ function parseCompletedCourses(inputText) {
     return(courseResults)
 }
 
-function parseNonCompletedCourses(inputText) {
+function parseNonCompletedCourseResults(inputText) {
     var pattern = INCOMPLETE_COURSE_PATTERN
     var courseResults = []
     var regex = new RegExp(pattern, 'g')
@@ -61,7 +61,7 @@ function parseNonCompletedCourses(inputText) {
     while((resultArray = regex.exec(inputText)) != null) {
         var code = resultArray[1]
         var name = "PLACEHOLDER_NAME"
-        var credits = resultArray[2]
+        var credits = parseCredits(resultArray[2])
         var date = "PLACEHOLDER_DATE"
         var grade = resultArray[3]
         courseResults.push(new CourseResult(code, name, credits, date, grade, false, null))
@@ -215,7 +215,7 @@ function getCourseStats(html, courseResult) {
     course = parseCourse(html)
 
 	if (!courseResult.isCompleted) {
-		course.points = Number(courseResult.credits.split(' ')[0])
+		course.points = courseResult.credits
 	}
 
 	return(course);
@@ -275,7 +275,7 @@ function analyze() {
 
     console.log(JSON.stringify(input));
 
-    courseList = parseAllCourseResults(input)
+    courseList = parseCourseResults(input)
     showTable(courseList)
 }
 
@@ -285,7 +285,9 @@ function onTextAreaChange() {
 
 // Exports for testing
 exports.Course = Course
+exports.parseCourseResults = parseCourseResults
 exports.parseCourse = parseCourse
+exports.parseCredits = parseCredits
 
 // window.onload = function() {
 //     var app = new Vue({
