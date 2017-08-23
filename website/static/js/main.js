@@ -266,6 +266,8 @@ function onTextAreaChange() {
 
 // Exports for testing
 exports.CourseTableModel = CourseTableModel
+exports.Course = Course
+exports.parseCourse = parseCourse
 
 // window.onload = function() {
 //     var app = new Vue({
