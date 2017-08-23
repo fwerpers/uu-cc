@@ -208,12 +208,13 @@ function getCourseHTMLObservable(courseCode) {
 	var url = baseUrl + '?code=' + courseCode
     var courseHTMLObservable = Rx.Observable
 		.ajax({url: url, method: 'GET', responseType: 'text', crossDomain: false})
+        .map(data => data.response)
     return(courseHTMLObservable)
 }
 
 function getCourseStatsObservable(courseResult) {
 	var courseStatsObservable = getCourseHTMLObservable(courseResult.code)
-		.map(data => getCourseStats(data.response, courseResult))
+		.map(html => getCourseStats(html, courseResult))
 	return(courseStatsObservable)
 }
 
