@@ -1,12 +1,19 @@
 import test from 'ava';
 const main = require("../static/js/main.js")
 
-test('parse incomplete course input', t => {
-    var input = "1TD396\tDatoriserad bildanalys I (5 hp)\t \n \tSkriftligt prov\t3 hp\t2015-12-14\t4\t  \t(33,5)\n \tInlämningsuppgifter\t2 hp\t2017-07-04\tG\t  \t "
-
+test('parse non-completed course input', t => {
+    var fs = require('fs')
+    var input = fs.readFileSync('test/input/noncompleted_course.txt', 'utf8')
     var courseList = main.parseCourseResults(input)
-
+    t.true(courseList.length > 0)
     t.is(courseList[0].credits, 3)
+})
+
+test('parse completed course input', t => {
+    var fs = require('fs')
+    var input = fs.readFileSync('test/input/completed_course.txt', 'utf8')
+    var courseList = main.parseCourseResults(input)
+    t.is(courseList[0].credits, 5)
 })
 
 test('parse credits string', t => {
