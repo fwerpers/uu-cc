@@ -12,7 +12,14 @@ test('parse incomplete course input', t => {
     t.pass();
 })
 
-test('request course data', t => {
+test.skip('parse course html', t => {
+    var fs = require('fs')
+    var html = fs.readFileSync('test/input/course.html', 'utf8')
+    console.log(html);
+    t.pass();
+})
+
+test.skip('request course data', t => {
     //http://www.uu.se/utbildning/utbildningar/selma/kursplan/?kKod=1TD184
     var code = '1TD184'
     t.pass();
