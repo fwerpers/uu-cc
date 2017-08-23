@@ -4,7 +4,7 @@ const main = require("../static/js/main.js")
 test('parse non-completed course input', t => {
     var fs = require('fs')
     var input = fs.readFileSync('test/input/noncompleted_course.txt', 'utf8')
-    var courseList = main.parseCourseResults(input)
+    var courseList = main.parseNonCompletedCourseResults(input)
     t.true(courseList.length > 0)
     t.is(courseList[0].credits, 3)
 })
@@ -12,7 +12,7 @@ test('parse non-completed course input', t => {
 test('parse completed course input', t => {
     var fs = require('fs')
     var input = fs.readFileSync('test/input/completed_course.txt', 'utf8')
-    var courseList = main.parseCourseResults(input)
+    var courseList = main.parseCompletedCourseResults(input)
     t.is(courseList[0].credits, 5)
 })
 
