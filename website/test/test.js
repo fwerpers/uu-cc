@@ -23,6 +23,7 @@ test('parse credits string', t => {
     t.is(credits, 3)
 })
 
+// Needs browser support
 test.skip('parse course html', t => {
     var fs = require('fs')
     var html = fs.readFileSync('test/input/course.html', 'utf8')
